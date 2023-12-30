@@ -288,7 +288,10 @@ class InstallCommand(RequirementCommand):
         if options.upgrade:
             upgrade_strategy = options.upgrade_strategy
 
-        cmdoptions.check_dist_restriction(options, check_target=True)
+        # We shouldn't really care about checking dist restrictions when
+        # utilizing dry run since no packages will actually get installed
+        if not options.dry_run:
+            cmdoptions.check_dist_restriction(options, check_target=True)
 
         logger.verbose("Using %s", get_pip_version())
         options.use_user_site = decide_user_install(
